@@ -1,0 +1,49 @@
+--Start By @Tele_Sudo
+local function is_channel_disabled( receiver )
+ if not _config.disabled_channels then
+  return false
+ end
+
+ if _config.disabled_channels[receiver] == nil then
+  return false
+ end
+
+  return _config.disabled_channels[receiver]
+end
+
+local function enable_channel(receiver)
+ if not _config.disabled_channels then
+  _config.disabled_channels = {}
+ end
+
+ if _config.disabled_channels[receiver] == nil then
+  return "*ربات خاموش شد♨️❌*"
+ end
+ 
+ _config.disabled_channels[receiver] = false
+
+ save_config()
+ return "*ربات روشن شد✅♻️*"
+end
+
+local function disable_channel( receiver )
+ if not _config.disabled_channels then
+  _config.disabled_channels = {}
+ end
+ 
+ _config.disabled_channels[receiver] = true
+
+ save_config()
+ return "*ربات خاموش شد♨️❌*"
+end
+
+local function pre_process(msg)
+ local receiver = msg.chat_id_
+ 
+ if is_owner(msg) then
+   if msg.content_.text_ == "/bot on" or msg.content_.text_ == "/Bot on" or msg.content_.text_ == "!bot on" or msg.content_.text_ == "!Bot on" then
+     enable_channel(receiver)
+   end
+ end
+
+  if is_channel_disabled(receiver) then
